@@ -8,28 +8,28 @@
 ### Grupo Procourval
 
 #### Objetivo
-Desarrollar un modelo predictivo que permita estimar el valor del dólar para los próximos 3 años y plantear una estrategia de divisas. El modelo debe generar tres escenarios (neutro, positivo y negativo) para facilitar la toma de decisiones sobre el cambio de divisa.
+Desarrollar un modelo predictivo que permita estimar el valor del dólar para los próximos 3 años y plantear una estrategia de divisas. El modelo debe generar tres escenarios (positivo, neutro, negativo) para facilitar la toma de decisiones sobre el cambio de divisa.
 
 #### Metodología
 1. Recolección y análisis de datos históricos relevantes.
 2. Preprocesamiento y selección de variables.
 3. Entrenamiento de modelos predictivos (series temporales, machine learning).
-4. Generación de escenarios futuros (neutro, malo, bueno).
+4. Generación de escenarios futuros (positivo, neutro, negativo).
 5. Evaluación y validación del modelo.
 6. Propuesta de estrategia de divisas basada en los resultados.
 
 #### Escenarios
 - **Neutro:** Evolución esperada según tendencias actuales.
-- **Malo:** Factores adversos que afectan negativamente el valor del dólar.
-- **Bueno:** Factores positivos que favorecen el valor del dólar.
+- **Negativo:** Factores adversos que afectan negativamente el valor del dólar.
+- **Positivo:** Factores positivos que favorecen el valor del dólar.
 
 #### Entregables
 - Código fuente y notebooks del modelo.
 - Documentación técnica y de usuario.
-- Informe en Word con la justificación, metodología, resultados y recomendaciones.
+- Informe en PDF con la justificación, metodología, resultados y recomendaciones.
 
 #### Equipo
-Responsable: [Tu nombre]
+Responsable: Cristina Puertas
 Colaboradores: Grupo Procourval
 
 ---
