@@ -30,8 +30,8 @@ Desarrollar un modelo económico y predictivo capaz de estimar el valor del dól
 | `00_carga_datos.ipynb`    | Obtención de datos desde fuentes web/API         |
 | `01_exploracion_datos.ipynb` | Limpieza, análisis exploratorio, visualización  |
 | `02_modelado_predictivo.ipynb` | Entrenamiento del modelo, generación de escenarios |
-| `03_estrategia_divisas.ipynb` | Evaluación de resultados y recomendación estratégica |
-
+| `03_modelo_combinado.ipynb` | fusión de modelos para mayor precisión y estabilidad |
+| `04_estrategia_divisas.ipynb` | Evaluación de resultados y recomendación estratégica |
 ###  Entregables
 
 - Dataset limpio y documentado (`dataset_final_economico.csv`)
