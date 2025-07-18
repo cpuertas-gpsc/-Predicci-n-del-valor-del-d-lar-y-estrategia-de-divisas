@@ -35,9 +35,12 @@ Desarrollar un modelo económico y predictivo capaz de estimar el valor del dól
 ###  Entregables
 
 - Dataset limpio y documentado (`dataset_final_economico.csv`)
+- Modelo entenado Prophet (`modelo_prophet.pkl`)
+- Modelos combinados para app (`sistema_usdeur.pkl`)
 - Notebooks explicativos y reproducibles
 - Informe ejecutivo en PDF
 - Dosier técnico para presentación institucional
+- App de Streamlit ejecutable desde un script
 
 ###  Equipo
 
