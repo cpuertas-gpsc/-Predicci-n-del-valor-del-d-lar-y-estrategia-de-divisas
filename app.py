@@ -41,7 +41,7 @@ st.image("logo grupo.JPG", width=180)
 
 # Título
 st.title("Sistema Predictivo USD/EUR")
-st.subheader("Herramienta inteligente para la gestión de divisas")
+st.subheader("Herramienta para la gestión de divisas")
 
 # Cargar sistema
 sistema = joblib.load("sistema_usdeur.pkl")
@@ -52,17 +52,55 @@ forecast = sistema["forecast_prophet"]
 # Introducción
 st.header("Sobre el proyecto")
 st.markdown("""
-Este sistema predictivo ha sido diseñado para anticipar la evolución del tipo de cambio USD/EUR en contextos económicos variables.
+La gestión eficiente del tipo de cambio USD/EUR es una tarea crítica para empresas que operan en mercados internacionales. Esta aplicación ha sido desarrollada como herramienta predictiva estratégica, orientada específicamente a evaluar **cuándo conviene convertir dólares a euros** de forma inteligente y respaldada por datos.
 
-**¿Por qué dos modelos?**  
-- Prophet analiza patrones históricos internos del tipo de cambio.  
-- XGBoost incorpora variables exógenas: inflación, tasas, índice DXY...
+---
 
-**¿Qué aporta la combinación?**  
-- Mejora la precisión.  
-- Detecta incoherencias entre fuentes.  
-- Ayuda a tomar mejores decisiones de cobertura en divisa.
+###  ¿Cómo funciona el sistema?
+
+El modelo predictivo combina dos enfoques analíticos complementarios:
+
+- **Prophet (Meta/Facebook)**  
+  Un modelo de series temporales capaz de identificar patrones históricos, estacionalidades y tendencias internas del mercado cambiario.  
+  Ideal para estudiar la evolución natural del tipo de cambio sin variables externas.
+
+- **XGBoost (Extreme Gradient Boosting)**  
+  Algoritmo de aprendizaje supervisado que incorpora variables macroeconómicas clave como inflación en EE.UU., tasa de interés de la Reserva Federal, índice DXY y rezagos históricos.  
+  Permite capturar el impacto de factores externos sobre el valor del dólar.
+
+---
+
+###  ¿Por qué usar ambos?
+
+La combinación de Prophet y XGBoost permite:
+- **Mejorar la precisión** de la predicción.
+- Detectar discrepancias entre patrones históricos y señales económicas del entorno.
+- Generar una estimación más equilibrada y confiable para el tipo de cambio.
+- Emitir recomendaciones estratégicas de conversión de divisa con respaldo técnico.
+
+Este enfoque se considera **conservador**: prioriza coherencia entre modelos internos y tiende a proyectar el valor del dólar de forma estructural, sin incorporar expectativas de mercado o eventos especulativos.
+
+---
+
+###  Comparación en línea con fuentes externas
+
+Para validar las estimaciones y fortalecer la toma de decisiones, el sistema compara sus resultados con predicciones publicadas por fuentes externas especializadas.
+
+Estas fuentes utilizan modelos técnicos, encuestas de sentimiento y proyecciones del mercado para estimar el comportamiento del USD/EUR en horizontes mensuales.
+
+ El sistema alerta si existe una **divergencia significativa entre el modelo interno y el consenso externo**, lo que puede indicar un momento óptimo (o de riesgo) para realizar el cambio de divisa.
+
+---
+
+Este proyecto busca transformar la incertidumbre cambiaria en un recurso estratégico, aportando predicciones y visualizaciones claras  directamente a la gestión financiera.
 """)
+# 📅 Instrucción antes del selector
+st.markdown("""
+<div style="background-color:#f9f9f9; padding:12px; border-left:5px solid #0b6cb7; border-radius:6px; margin-top:15px;">
+<strong style="color:#0b6cb7;">Selecciona una fecha a partir de este mes para consultar la predicción del tipo de cambio USD/EUR, SELECCIONA AÑO Y MES .</strong>
+</div>
+""", unsafe_allow_html=True)
+
 
 # Fechas disponibles (primer día del mes de 2025 a 2027)
 fechas_validas = [datetime.date(2025, 1, 1) + relativedelta(months=i) for i in range(36)]
@@ -91,21 +129,22 @@ def evaluar_fecha(fecha, entrada_macro):
     valor_promedio = (valor_prophet + valor_xgb) / 2
     desviacion = abs(valor_prophet - valor_xgb) / valor_promedio * 100
 
-    # Recomendación general
+    # 🚦 Recomendación general según coherencia entre modelos
     if desviacion < 2:
-        mensaje = "✅ Alta coherencia entre modelos: predicción confiable."
+     mensaje = "🟢 Los modelos se parecen mucho: puedes confiar en la predicción."
     elif valor_xgb > valor_prophet:
-        mensaje = "⚠️ XGBoost estima presión externa alcista sobre el dólar."
+     mensaje = "🔴 El modelo económico dice que el dólar podría subir. Atención si estás pensando en cambiar."
     else:
-        mensaje = "⚠️ Prophet detecta patrón de subida interna."
+        mensaje = "🟡 El modelo histórico muestra una subida del dólar basada en su comportamiento pasado."
 
-    # Recomendación estratégica en divisa
+# 💱 Recomendación sobre cuándo cambiar dólares a euros
     if desviacion < 2:
-        riesgo_texto = "🟢 Baja volatilidad. Podría ser un momento estable para cambiar divisa."
+     riesgo_texto = "🟢 Es un mes estable: podrías cambiar tus dólares con confianza."
     elif valor_xgb > valor_prophet:
-        riesgo_texto = "🔴 Riesgo exógeno: el entorno económico anticipa subida del dólar. Evalúa si conviene esperar."
+        riesgo_texto = "🔴 Riesgo externo: el dólar podría subir. Si puedes esperar, quizá recibas más euros."
     else:
-        riesgo_texto = "🟡 Riesgo histórico: patrones pasados indican apreciación. Considera cobertura."
+     riesgo_texto = "🟡 El pasado indica que el dólar puede subir. Considera si te conviene esperar un poco."
+
 
     return {
         "XGBoost": round(valor_xgb, 4),
@@ -262,20 +301,20 @@ st.markdown(f"""
 if abs(delta_ext_pct) < 2:
         st.markdown("""
          <div style="background-color:#e6f7e6; padding:15px; border-radius:8px;">
-         <strong style="color:#006400;">✅ Tu modelo está alineado con las previsiones externas para ese mes.</strong>
+         <strong style="color:#006400;">✅ El modelo está alineado con las previsiones externas para ese mes.</strong>
         </div>
      """, unsafe_allow_html=True)
    
 elif resultado["Promedio"] > prediccion_externa:
      st.markdown("""
      <div style="background-color:#fff0f0; padding:15px; border-radius:8px;">
-           <strong style="color:#8B0000;"> Tu modelo sobreestima el USD frente al EUR según fuentes externas.</strong>
+           <strong style="color:#8B0000;"> El modelo sobreestima el USD frente al EUR según fuentes externas.</strong>
      </div>
      """, unsafe_allow_html=True)
 else:
         st.markdown("""
         <div style="background-color:#f0f7ff; padding:15px; border-radius:8px;">
-         <strong style="color:#0b6cb7;"> Tu modelo subestima el USD frente al EUR según fuentes externas.</strong>
+         <strong style="color:#0b6cb7;"> El modelo subestima el USD frente al EUR según fuentes externas.</strong>
         </div>
      """, unsafe_allow_html=True)
 
@@ -296,19 +335,40 @@ if os.path.exists("output.png"):
 else:
     st.warning("La imagen de evaluación no está disponible.")
 
-# Cierre
-st.header("Aplicación operativa")
+st.header("Cierre del proyecto")
 st.markdown("""
-Este sistema puede integrarse en:
+Este sistema es el resultado de un trabajo técnico y estratégico realizado por el equipo de Grupo Procourval, orientado a fortalecer la toma de decisiones en operaciones de divisas a través de un modelo híbrido de predicción USD/EUR.
 
-- Paneles financieros
-- Estrategias de cobertura
-- Estudios de riesgo por divisa
-- Decisiones mensuales de cambio
+Durante el desarrollo:
 
-Su estructura permite evaluar fechas, predecir comportamientos, y orientar decisiones críticas en entornos cambiantes.
+- Se recopilaron y limpiaron series temporales y datos macroeconómicos clave.
+- Se entrenaron dos modelos complementarios: Prophet (patrones históricos) y XGBoost (variables externas).
+- Se construyó una arquitectura combinada, que mejora precisión y estabilidad frente a enfoques individuales.
+- Se diseñó una aplicación interactiva que permite consultar predicciones por fecha y comparar con fuentes externas del mercado.
+
+Este sistema ofrece recomendaciones operativas claras, alertas visuales y métricas de confianza, siendo una herramienta valiosa para:
+
+- Paneles financieros internos  
+- Estrategias de cobertura y cambio  
+- Estudios técnicos de riesgo cambiario  
+- Simulación de escenarios futuros
+
+---
+
+###  ¿Qué sigue?
+
+Este es solo un primer borrador. Hay oportunidade de mejora como:
+
+- Integrar nuevas variables geopolíticas y financieras.
+- Automatizar la actualización de datos y predicciones en tiempo real.
+- Explorar modelos de red neuronal (LSTM, RNN) para mayor profundidad.
+
+El feedback  proporcionado será clave para seguir iterando y hacer de esta herramienta un sistema más completo y adaptado al entorno cambiante.
+
+Gracias.
 """)
 
+
 st.markdown("---")
-st.caption("© Grupo Corporativo · Sistema híbrido desarrollado con Python, Streamlit, Prophet & XGBoost")
+st.caption("© Cristina Puertas · Sistema híbrido desarrollado con Python, Streamlit, Prophet & XGBoost")
 
