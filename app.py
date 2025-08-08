@@ -235,9 +235,7 @@ st.markdown("""
 Optimizar la toma de decisiones en operaciones de divisas mediante inteligencia predictiva, simulación de escenarios y análisis financiero especializado.
 
 </div>
-""", unsafe_allow_html=True)
-# Cargar logo del departamento
-logo = Image.open("logo mail.jpg")  
+""", unsafe_allow_html=True) 
 
 # Línea divisoria
 st.markdown("---")
@@ -246,7 +244,7 @@ st.markdown("---")
 col1, col2 = st.columns([1, 5])
 
 with col1:
-    st.image(logo, width=60)
+    st.image("logo mail.jpg", width=60)
 
 with col2:
     st.markdown("""
