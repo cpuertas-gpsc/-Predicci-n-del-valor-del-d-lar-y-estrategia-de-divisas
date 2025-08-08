@@ -236,3 +236,23 @@ Optimizar la toma de decisiones en operaciones de divisas mediante inteligencia 
 
 </div>
 """, unsafe_allow_html=True)
+# Cargar logo del departamento
+logo = Image.open("logo mail.jpg")  
+
+# Línea divisoria
+st.markdown("---")
+
+# Firma discreta
+col1, col2 = st.columns([1, 5])
+
+with col1:
+    st.image(logo, width=60)
+
+with col2:
+    st.markdown("""
+    <div style='font-size: 12px; color: gray;'>
+        Aplicación desarrollada por Cristina Puertas 
+        <br>Departamento de Análisis de Datos
+        <br><a href='mailto:cpuertas@gpsc.es' style='color: gray;'>cristina@example.com</a>
+    </div>
+    """, unsafe_allow_html=True)
