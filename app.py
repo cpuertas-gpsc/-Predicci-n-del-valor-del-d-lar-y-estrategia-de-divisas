@@ -251,6 +251,6 @@ with col2:
     <div style='font-size: 12px; color: gray;'>
         Aplicación desarrollada por Cristina Puertas 
         <br>Departamento de Análisis de Datos
-        <br><a href='mailto:cpuertas@gpsc.es' style='color: gray;'>cristina@example.com</a>
+        <br><a href='mailto:cpuertas@gpsc.es' style='color: gray;'>cpuertas@gpsc.es.com</a>
     </div>
     """, unsafe_allow_html=True)
