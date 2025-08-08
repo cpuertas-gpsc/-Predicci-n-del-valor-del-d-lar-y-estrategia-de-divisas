@@ -61,7 +61,7 @@ forecast["ds"] = pd.to_datetime(forecast["ds"])
 import plotly.express as px
 
 # 📅 Selector de fecha
-st.markdown("### 🔮 Predicción futura del USD/EUR")
+st.markdown("###  Predicción futura del USD/EUR")
 fecha_seleccionada = st.date_input(
     "Selecciona una fecha para ver los tres escenarios:",
     value=forecast["ds"].max().date(),
@@ -144,7 +144,7 @@ if not valor_real_fila.empty:
     dif_negativo = round((negativo - valor_real) / valor_real * 100, 2)
 
     # 🧾 Mostrar tabla comparativa
-    st.markdown("### 📊 Comparativa con valor real")
+    st.markdown("###  Comparativa con valor real")
     comparativa = pd.DataFrame({
         "Escenario": ["Real", "Neutro", "Positivo", "Negativo"],
         "Valor USD/EUR": [valor_real, neutro, positivo, negativo],
@@ -154,7 +154,7 @@ if not valor_real_fila.empty:
 
 else:
     # 🧾 Mostrar tabla solo con escenarios
-    st.markdown("### 📊 Predicción")
+    st.markdown("###  Predicción")
     comparativa = pd.DataFrame({
         "Escenario": ["Neutro", "Positivo", "Negativo"],
         "Valor USD/EUR": [neutro, positivo, negativo]
@@ -169,15 +169,15 @@ csv_data = csv_buffer.getvalue()
 
 # Botón de descarga
 st.download_button(
-    label="📥 Descargar tabla como CSV",
+    label=" Descargar tabla como CSV",
     data=csv_data,
     file_name="comparativa_usdeur.csv",
     mime="text/csv"
 )
 # Mostrar texto plano para copiar
-st.markdown("### 📋 Copiar tabla")
+st.markdown("###  Copiar tabla")
 st.text(comparativa.to_string(index=False))
-st.markdown("### 🧠 Resumen de la predicción")
+st.markdown("###  Resumen de la predicción")
 st.markdown(f"""
 <div style='background-color:#e6f2ff; padding:15px; border-radius:6px; color:#0b6cb7; font-size:16px;'>
 Para la fecha <strong>{fecha_mas_cercana.strftime('%Y-%m-%d')}</strong>, el modelo predice:<br>
@@ -185,12 +185,12 @@ Para la fecha <strong>{fecha_mas_cercana.strftime('%Y-%m-%d')}</strong>, el mode
 🟢 Escenario positivo: <strong>{positivo}</strong><br>
 🔴 Escenario negativo: <strong>{negativo}</strong><br><br>
 
-📊 <strong>Análisis experto:</strong><br>
+ <strong>Análisis experto:</strong><br>
 • Rango total entre escenarios: <strong>{round(positivo - negativo, 4)}</strong><br>
 • Desviación estimada: <strong>{round(((positivo - negativo)/2), 4)}</strong><br>
 • Distancia al neutro: Positivo: <strong>{round(positivo - neutro, 4)}</strong> / Negativo: <strong>{round(neutro - negativo, 4)}</strong><br><br>
 
-🧭 <strong>Recomendación estratégica:</strong><br>
+ <strong>Recomendación estratégica:</strong><br>
 {f"El modelo muestra una dispersión significativa (>10%), lo que sugiere alta volatilidad. Se recomienda cobertura parcial si hay exposición al USD." if (positivo - negativo) > 0.1 else "La dispersión es moderada. Puede mantenerse la posición actual, pero se recomienda monitoreo activo."}
 </div>
 """, unsafe_allow_html=True)
@@ -209,29 +209,29 @@ desviacion = round(rango / 2, 4)
 dist_pos = round(positivo - neutro, 4)
 dist_neg = round(neutro - negativo, 4)
 riesgo = "🔴 Alto" if rango > 0.1 else "🟡 Moderado" if rango > 0.05 else "🟢 Bajo"
-st.markdown("### 📚 Metodología y fuentes del modelo")
+st.markdown("###  Metodología y fuentes del modelo")
 st.markdown("""
 <div style='background-color:#f0f8ff; padding:20px; border-radius:10px; color:#0b6cb7; font-size:16px;'>
 
-🔍 <strong>Métricas utilizadas:</strong><br>
+ <strong>Métricas utilizadas:</strong><br>
 • <strong>USD/EUR:</strong> Tipo de cambio diario<br>
 • <strong>DXY:</strong> Índice de fortaleza del dólar<br>
 • <strong>Inflación USA:</strong> Índice de Precios al Consumidor (CPI)<br>
 • <strong>Tasa de interés Fed:</strong> Tasa de fondos federales efectiva<br><br>
 
-📈 <strong>Modelo aplicado:</strong><br>
+ <strong>Modelo aplicado:</strong><br>
 • Algoritmo Prophet entrenado sobre series temporales desde 2010<br>
 • Simulación de tres escenarios: neutro, positivo y negativo<br>
 • Análisis de dispersión y recomendación estratégica<br><br>
 
-🌐 <strong>Fuentes oficiales:</strong><br>
+<strong>Fuentes oficiales:</strong><br>
 • <a href="https://fred.stlouisfed.org/series/DEXUSEU" target="_blank">FRED - Reserva Federal</a><br>
 • <a href="https://finance.yahoo.com/quote/EURUSD=X" target="_blank">Yahoo Finance - EUR/USD</a><br><br>
 
-📦 <strong>Repositorio del proyecto:</strong><br>
+ <strong>Repositorio del proyecto:</strong><br>
 • <a href="https://github.com/cpuertas-gpsc/-Predicci-n-del-valor-del-d-lar-y-estrategia-de-divisas" target="_blank">Grupo Procourval – Predicción del valor del dólar y estrategia de divisas</a><br><br>
 
-🧠 <strong>Objetivo:</strong><br>
+ <strong>Objetivo:</strong><br>
 Optimizar la toma de decisiones en operaciones de divisas mediante inteligencia predictiva, simulación de escenarios y análisis financiero especializado.
 
 </div>
