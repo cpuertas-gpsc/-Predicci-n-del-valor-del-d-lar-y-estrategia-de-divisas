@@ -9,25 +9,34 @@ st.set_page_config(page_title="Predicción USD/EUR", layout="wide")
 st.image("logo grupo.JPG", width=180)
 st.title("Sistema Predictivo USD/EUR Mejorado")
 
-# 🔗 Función para obtener valor USD/EUR desde FRED
-def obtener_valor_dolar_fred(api_key):
+## 🔗 Función para obtener la serie histórica USD/EUR desde FRED
+def obtener_serie_dolar_fred(api_key):
     url = "https://api.stlouisfed.org/fred/series/observations"
     params = {
         "series_id": "DEXUSEU",
         "api_key": api_key,
         "file_type": "json",
-        "sort_order": "desc",
-        "limit": 1
+        "sort_order": "asc",
+        "limit": 10000  # máximo permitido por FRED
     }
     response = requests.get(url, params=params)
     data = response.json()
-    valor = float(data["observations"][0]["value"])
-    fecha = data["observations"][0]["date"]
-    return valor, fecha
+    fechas = []
+    valores = []
+    for obs in data["observations"]:
+        try:
+            valor = float(obs["value"])
+            fechas.append(pd.to_datetime(obs["date"]))
+            valores.append(valor)
+        except:
+            continue
+    return pd.DataFrame({"ds": fechas, "valor_real": valores})
 
-# 🔑 Clave API FRED
+## 🔑 Clave API FRED
 api_key = "437ffc22620f0fe3615350b1764f112b"
-valor_dolar, fecha_dato = obtener_valor_dolar_fred(api_key)
+serie_fred = obtener_serie_dolar_fred(api_key)
+valor_dolar = serie_fred["valor_real"].iloc[-1]
+fecha_dato = serie_fred["ds"].iloc[-1]
 
 # 📆 Formatear fecha como Año-Mes
 fecha_formateada = pd.to_datetime(fecha_dato).strftime("%Y-%m")
@@ -96,13 +105,8 @@ else:
     st.warning("No se encontró ninguna predicción cercana.")
 
 
-# 📥 Cargar datos reales desde el CSV económico
-datos_reales = pd.read_csv("dataset_final_economico.csv")
-datos_reales["Fecha"] = pd.to_datetime(datos_reales["Fecha"])
-datos_reales = datos_reales.rename(columns={"Fecha": "ds", "USD_EUR": "valor_real"})
-
-# 🔄 Asegurar que las fechas coincidan con el forecast
-datos_reales_filtrados = datos_reales[datos_reales["ds"].isin(forecast["ds"])]
+## 📥 Usar datos reales desde la API FRED
+datos_reales_filtrados = serie_fred[serie_fred["ds"].isin(forecast["ds"])]
 
 # 📊 Gráfico con escenarios + valor real desde CSV
 import plotly.graph_objects as go
@@ -114,7 +118,7 @@ fig.add_trace(go.Scatter(x=forecast["ds"], y=forecast["escenario_neutro"], mode=
 fig.add_trace(go.Scatter(x=forecast["ds"], y=forecast["escenario_positivo"], mode='lines', name='Positivo', line=dict(color='green')))
 fig.add_trace(go.Scatter(x=forecast["ds"], y=forecast["escenario_negativo"], mode='lines', name='Negativo', line=dict(color='red')))
 
-# 🔶 Valor real desde el CSV
+# 🔶 Valor real desde la API FRED
 fig.add_trace(go.Scatter(
     x=datos_reales_filtrados["ds"],
     y=datos_reales_filtrados["valor_real"],
@@ -133,7 +137,7 @@ fig.update_layout(
 
 st.plotly_chart(fig, use_container_width=True)
 # 🔍 Buscar valor real para la fecha más cercana
-valor_real_fila = datos_reales[datos_reales["ds"] == fecha_mas_cercana]
+valor_real_fila = datos_reales_filtrados[datos_reales_filtrados["ds"] == fecha_mas_cercana]
 
 if not valor_real_fila.empty:
     valor_real = round(valor_real_fila["valor_real"].values[0], 4)
